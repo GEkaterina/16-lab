@@ -1,215 +1,202 @@
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-
-
-
-
-int main(int ac,char **av)
+void fill(float* y,int n)
 {
-    FILE* ptrFile = fopen(av[1] , "r");/*open a file to read from the argument string*/
-    char mystring[255], zv[254];
-    int* lenta;
-    int n = 0, i = 0;/*i-position in the tape n - number of cells in the tape*/
-    int st; /*position in file*/
-
-    lenta = (int*)malloc(i * sizeof(int));/*allocate memory for the tape*/
-    if (lenta==NULL)
-    {
-        printf ("!!! Out of memory!!!\n\n");
-        return 0;
-    }
-    else
-    {
-
-
-        lenta[i] = 0;
-        n=sizeof(lenta) / sizeof(lenta[0]); /* number of cells in a tape*/
-
-
-        if (ptrFile == NULL)
+    int i;
+    for(i=0; i<n; i++)
         {
-            printf ("!!! Error opening file !!!\n\n");
+            y[i] = i*i + 1;   /*Creating array for sorting*/
         }
-        else
-        {
-            while (fscanf(ptrFile,"%s", mystring) != EOF)
-            {
-                if (strcmp(mystring,"movl")==0) /* go left*/
-                {
-                    if (i>0)
-                    {
-                        i--;
-                        printf ("%s\n\n", mystring);
-                    }
-                    else
-                    {
-                        printf ("%s\n\n", mystring);
-                        printf ("!!! It is impossible to move!!!\n\n");
-                    }
-                }
-
-
-
-                if (strcmp(mystring, "movr")==0) /* go  right*/
-                {
-                    if (i == n-1) /*if the right is empty*/
-                    {
-                        i++;
-                        n++;
-                        lenta = realloc(lenta, i); /*increase memory and add one cell*/
-                        if (lenta==NULL)
-                        {
-                            printf ("!!!Out of memory!!!");
-                            return 0;
-                        }
-                        else
-                        {
-                            lenta[i] = 0; /*fill a new cell with zero */
-                            printf ("%s\n\n", mystring);
-                        }
-                    }
-                    else
-                    {
-                        i++;
-                        printf ("%s\n\n", mystring);
-                    }
-                }
-
-
-
-                if (strcmp(mystring, "inc")==0) /*incrimination  */
-                {
-                    if (lenta[i] < 255)
-                    {
-                        lenta[i]++; /* increase by 1*/
-                        printf ("%s\n\n", mystring);
-                    }
-                    else
-                    {
-                        printf ("%s\n", mystring);
-                        printf("In the cell - 255 (zero) !!!\n\n");
-                        lenta[i] = 0;
-                    }
-                }
-
-
-
-                if (strcmp(mystring, "dec")==0) /*decrement by 1 */
-                {
-                    if (lenta[i] > 0)
-                    {
-                        lenta[i]--;
-                        printf ("%s\n\n", mystring);
-                    }
-                    else
-                    {
-                        printf ("%s\n", mystring);
-                        printf("In the cell - 0 !!!\n\n");
-                    }
-                }
-
-
-
-                if (strcmp(mystring, "print")==0)
-                {
-                    printf ("%s\n", mystring);
-                    printf ("%d\n\n", lenta[i]);
-                }
-
-
-
-                if (strcmp(mystring, "printc")==0)
-                {
-                    printf ("%s\n", mystring);
-                    printf ("%c\n\n", lenta[i]);
-                }
-
-
-
-                if (strcmp(mystring, "get")==0)
-                {
-                    printf ("%s\n\n", mystring);
-                    printf ("Enter value 0-255\n");
-                    scanf ("%d", &lenta[i]);
-                }
-
-
-
-                if (mystring[0]== '*') /* compare 1 character */
-                {
-
-                    fgets(zv, 254, ptrFile);
-                    printf("*%s\n\n", zv);
-                }
-
-                if (strcmp(mystring, "end")==0)
-                {
-                   if (lenta[i] == 0)
-                        {
-                            printf ("%s\n\n", mystring);
-                            return 0;
-                        }
-                    else
-                        {
-                            fseek(ptrFile, st, 0);
-                            fscanf(ptrFile,"%s", mystring);
-                            if ((strcmp(mystring, "end")==0) && lenta[i] > 0 )
-                                {
-                                    printf ("END after BEGIN - Error of infinite loop!!!\n\n");
-                                    return 1;
-                                }
-                            else
-                                {
-                                    fseek(ptrFile, st, 0);
-                                }
-                        }
-                }
-
-                if (strcmp(mystring, "begin")==0)
-                {
-                    printf ("%s\n\n", mystring);
-                    st = ftell(ptrFile); /* remember the position in the file after begin*/
-                    if(lenta[i]==0)
-                    {
-                        do
-                        {
-                            fscanf(ptrFile,"%s", mystring);
-
-                        }
-                        while (strcmp(mystring, "end")!=0);
-
-
-                        if (lenta[i] == 0)
-                        {
-                            printf ("%s\n\n", mystring);
-                            return 0;
-                        }
-                        else
-                        {
-                            fseek(ptrFile, st, 0);
-                            fscanf(ptrFile,"%s", mystring);
-                            printf ("%s\n\n", mystring);
-
-                            if ((strcmp(mystring, "end")==0) && lenta[i] > 0 )
-                                {
-                                    printf ("END after BEGIN - Error of infinite loop!!!\n\n");
-                                    return 1;
-                                }
-                            else
-                                {
-                                    fseek(ptrFile, st, 0);
-                                }
-                        }
-                    }
-                }
-            }
-            free (lenta);
-            fclose (ptrFile);
-        }
-       return 0;
-    }
+    return;
 }
 
+/*Input  elements of array*/
+void input_array(int* z,int n)
+{
+    printf("Enter the elements of the array:");
+    int i;
+    for(i=0; i<n; i++)
+        {
+            while (!scanf("%d", &z[i]))
+                {
+                    while (getchar() != '\n');
+                    printf("Error enter again: ");
+                }
+        }
+    return;
+}
+/*Output the array*/
+void autput_array(int* w,int n)
+{
+    int i;
+    for(i=0; i<n; i++)
+        {
+            printf("%d ", w[i]);
+        }
+    printf("\n");
+    return;
+}
+/*Deleting same elements*/
+void delit_same(int** x, int* n)
+{
+    int* y = (int *)malloc(100 * sizeof(int));
+    int i,j;
+    int k = 0;
+    int flag=0;
+    for(i=0; i<*n; i++)
+        {
+            for(j=0; j<k; j++)
+                {
+                    if ((*x)[i] == y[j])
+                        {
+                            flag = 1;
+                        }
+                }
+            if (flag == 0)
+                {
+                    y[k] = (*x)[i];
+                    k++;
+                }
+            flag=0;
+        }
+    *n = k;
+    *x = y;
+    return;
 
+}
+/*Hoar sorting function*/
+void quicksort(int *x, int lo, int hi)
+{
+    int p;
+    if (lo < hi)
+        {
+            p = partition(x, lo, hi);
+            quicksort(x, lo, p);
+            quicksort(x, p + 1, hi);
+        }
+
+}
+/*Splitting for sort*/
+int partition(int *x, int lo, int hi)
+{
+    int pivot;
+    pivot = x[lo];
+    int i,j;
+    i = lo - 1;
+    j = hi + 1;
+    while(1)
+        {
+            do
+                i = i + 1;
+            while (x[i] < pivot);
+
+            do
+                j = j - 1;
+            while (x[j] > pivot);
+
+            if (i >= j)
+                return j;
+            int tmp;
+            tmp = x[i];
+            x[i] = x[j];
+            x[j] = tmp;
+        }
+}
+/*Bubblesort*/
+int bubble_sort(int *x, int n)
+{
+    int i,j;
+    for(i=0; i < n-1; i++)
+        {
+            for(j = i+1; j < n; j++)
+                {
+                    if (x[j] < x[i])
+                        {
+                            int tmp;
+                            tmp = x[i];
+                            x[i] = x[j];
+                            x[j] = tmp;
+                        }
+                }
+        }
+}
+/*Finding N-MAX*/
+int find_N_max(int *x, int n, int MAX_N)
+/*Checking for N-MAX being lower than array size*/
+{
+    int *y = (int *)malloc(100 * sizeof(int));
+    int i;
+    for (i=0; i < n; i++)
+        {
+            y[i] = x[i];
+        }
+    /*Deleting same eleements*/
+    delit_same(&y,&n);
+    /*Sort final array*/
+    quicksort(y, 0, n-1);
+    int result;
+    result = y[n-MAX_N];
+    return result;
+
+}
+/*Finding M-MIN*/
+int find_M_min(int *x, int n, int MIN_M)
+/*Checking for M-MIN being lower than array size*/
+{
+    int *y = (int *)malloc(100 * sizeof(int));
+    int i;
+    for (i=0; i < n; i++)
+        {
+            y[i] = x[i];
+        }
+    /*Deleting same elements*/
+    delit_same(&y,&n);
+    /*Sort finsl array*/
+    quicksort(y, 0, n-1);
+    int result;
+    result = y[MIN_M-1]; /*MIN_M-1 is taken from 1 position of array*/
+    return result;
+
+}
+
+int main(void)
+{
+    int* x = (int *)malloc(100 * sizeof(int));
+    int n;
+    /*Amount of elemets*/
+    printf("Enter the size of the array:");
+    while (!scanf("%d", &n))
+        {
+            while (getchar() != '\n');
+            printf("Error enter again: ");
+        }
+    /*Array input from keyboard*/
+    input_array(x,n);
+    /*Deleting same elemets*/
+    delit_same(&x, &n);
+    /*Array sort*/
+    quicksort(x,0,n-1);
+    /*Array output*/
+    autput_array(x,n);
+    int N_MAX;
+    printf("Enter the N-th maximum in the sorted array:");
+    int a;
+    while (!scanf("%d", &a))
+        {
+            while (getchar() != '\n');
+            printf("Error enter again: ");
+        }
+    N_MAX = find_N_max(x, n, a);
+    printf("%d\n", N_MAX);
+    int M_MIN;
+    printf("Enter the M-th minimum in the sorted array:");
+    int b;
+    while (!scanf("%d", &b))
+        {
+            while (getchar() != '\n');
+            printf("Error enter again: ");
+        }
+    M_MIN = find_M_min(x, n, b);
+    printf("%d\n", M_MIN);
+    return 0;
+}
